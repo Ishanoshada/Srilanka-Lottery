@@ -232,3 +232,6 @@ For questions, bug reports, or support, please contact [ic31908@gmail.com](mailt
 - Built with [requests](https://requests.readthedocs.io/) and [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/).
 - Inspired by the need for accessible lottery data in Sri Lanka.
 - Thanks to the open-source community for providing tools and resources.
+
+**Repository Views** ![Views](https://profile-counter.glitch.me/srilottery/count.svg)
+
