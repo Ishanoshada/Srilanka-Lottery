@@ -7,4 +7,4 @@ from .scraper import (
     scrape_dlb_latest_results
 )
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"

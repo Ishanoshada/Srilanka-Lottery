@@ -101,14 +101,14 @@ def scrape_dlb_result(lottery_name, draw_or_date):
     """
     dlb_lottery_ids = {
         "Ada Kotipathi": 11,
-        "Jayoda": 2,
-        "Lagna Wasana": 3,
-        "Sasiri": 4,
+        "Jayoda": 6,
+        "Lagna Wasana": 2,
+        "Sasiri": 13,
         "Shanida": 5,
-        "Super Ball": 6,
-        "Supiri Dhana Sampatha": 7,
+        "Super Ball": 3,
+        "Supiri Dhana Sampatha": 17,
         "Jaya Sampatha": 8,
-        "Kapruka": 9
+        "Kapruka": 12
     }
 
     lottery_id = dlb_lottery_ids.get(lottery_name)
