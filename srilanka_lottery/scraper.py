@@ -279,26 +279,19 @@ def scrape_nlb_latest_results(session, lottery_name, limit=5):
     finally:
         session.close()
 
+
 def scrape_dlb_latest_results(lottery_name, limit=5):
-    """Scrape the latest results for a given DLB lottery.
-
-    Args:
-        lottery_name (str): Name of the DLB lottery.
-        limit (int): Maximum number of results to return.
-
-    Returns:
-        dict: Dictionary with list of results or error message.
-    """
+   
     dlb_lottery_ids = {
         "Ada Kotipathi": 11,
-        "Jayoda": 2,
-        "Lagna Wasana": 3,
-        "Sasiri": 4,
+        "Jayoda": 6,
+        "Lagna Wasana": 2,
+        "Sasiri": 13,
         "Shanida": 5,
-        "Super Ball": 6,
-        "Supiri Dhana Sampatha": 7,
+        "Super Ball": 3,
+        "Supiri Dhana Sampatha": 17,
         "Jaya Sampatha": 8,
-        "Kapruka": 9
+        "Kapruka": 12
     }
 
     lottery_id = dlb_lottery_ids.get(lottery_name)
@@ -309,11 +302,14 @@ def scrape_dlb_latest_results(lottery_name, limit=5):
     session = requests.Session()
     results = []
     page = 0
+    max_pages = 1000  # Large enough for ~1500 results
+
     try:
-        while len(results) < limit:
+        while len(results) < limit and page < max_pages:
+            previous_length = len(results)
             payload = {
                 "pageId": page,
-                "resultID": 14761,
+                "resultID": 14761,  # Verify if dynamic resultID is needed
                 "lotteryID": lottery_id,
                 "lastsegment": "en"
             }
@@ -329,6 +325,10 @@ def scrape_dlb_latest_results(lottery_name, limit=5):
             soup = BeautifulSoup(response.text, 'html.parser')
             rows = soup.select("tr")
 
+            if not rows:
+                #logging.info(f"No results found on page {page} for {lottery_name}")
+                break
+
             for row in rows:
                 if len(results) >= limit:
                     break
@@ -342,6 +342,8 @@ def scrape_dlb_latest_results(lottery_name, limit=5):
 
                     numbers = [li.text.strip() for li in columns[2].select("li") if li.text.strip()]
                     letter = next((li.text.strip() for li in columns[2].select("li.res_eng_letter")), "")
+                    # Filter out non-numeric values
+                    numbers = [n for n in numbers if n.isdigit()]
 
                     results.append({
                         "draw": draw_number,
@@ -350,10 +352,16 @@ def scrape_dlb_latest_results(lottery_name, limit=5):
                         "numbers": numbers
                     })
 
+            if len(results) == previous_length:
+                #logging.info(f"No new results added on page {page} for {lottery_name}")
+                break
+
             page += 1
 
+        #logging.info(f"Fetched {len(results)} results for {lottery_name}")
         return {"DLB_Results": results}
     except requests.RequestException as e:
+        #logging.error(f"Failed to fetch DLB results for {lottery_name}: {e}")
         return {"error": f"Failed to fetch DLB results: {str(e)}"}
     finally:
         session.close()

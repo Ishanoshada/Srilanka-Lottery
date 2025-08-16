@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="srilanka_lottery",
-    version="0.1.1",
+    version="0.1.2",
     author="Ishan Oshada",
     author_email="ic31908@gmail.com",
     description="Scrape Sri Lanka lottery results from NLB and DLB websites with this Python package",
